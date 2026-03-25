@@ -1,4 +1,4 @@
-package com.example.pickem.login;
+package com.example.pickem.login
 
-public class LoginScreen {
+class LoginScreen {
 }

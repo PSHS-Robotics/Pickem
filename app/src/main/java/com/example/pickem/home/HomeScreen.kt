@@ -1,4 +1,4 @@
-package com.example.pickem.home;
+package com.example.pickem.home
 
-public class HomeScreen {
+class HomeScreen {
 }

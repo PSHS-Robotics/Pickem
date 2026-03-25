@@ -1,4 +1,4 @@
-package com.example.pickem.games;
+package com.example.pickem.games
 
-public class GamesScreen {
+class GamesScreen {
 }
