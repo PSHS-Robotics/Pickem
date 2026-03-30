@@ -41,13 +41,13 @@ fun LoginScreen(
 
 @Composable
 fun TextBox(
-    labeltext: String
+    labelText: String
 ) {
     var text by remember { mutableStateOf("") }
 
     TextField(
         value = text,
         onValueChange = { text = it },
-        label = { androidx.compose.material3.Text(labeltext) }
+        label = { Text(labelText) }
     )
 }

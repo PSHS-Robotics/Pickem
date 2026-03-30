@@ -7,6 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import com.example.pickem.home.HomeScreen
 import com.example.pickem.login.LoginScreen
+import com.example.pickem.settings.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,15 @@ fun App() {
         "home" -> HomeScreen(
             onLoginClick = {
                 currentScreen = "login"
+            },
+            onSettingsClick = {
+                currentScreen = "settings"
+            }
+        )
+
+        "settings" -> SettingsScreen(
+            onBackClick = {
+                currentScreen = "home"
             }
         )
 

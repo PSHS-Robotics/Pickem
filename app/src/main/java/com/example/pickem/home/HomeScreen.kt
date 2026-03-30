@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onSettingsClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -34,6 +35,13 @@ fun HomeScreen(
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "logout")
+        }
+
+        Button(
+            onClick = onSettingsClick,
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "settings")
         }
     }
 }
