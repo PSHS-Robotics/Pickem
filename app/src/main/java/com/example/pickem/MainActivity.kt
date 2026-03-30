@@ -3,45 +3,37 @@ package com.example.pickem
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.pickem.ui.theme.PickemTheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.*
+import com.example.pickem.home.HomeScreen
+import com.example.pickem.login.LoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            PickemTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            MaterialTheme {
+                App()
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun App() {
+    var currentScreen by remember { mutableStateOf("login") }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PickemTheme {
-        Greeting("Matthew")
+    when (currentScreen) {
+        "home" -> HomeScreen(
+            onLoginClick = {
+                currentScreen = "login"
+            }
+        )
+
+        "login" -> LoginScreen(
+            onBackClick = {
+                currentScreen = "home"
+            }
+        )
     }
 }
