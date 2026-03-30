@@ -1,3 +1,6 @@
+/*
+* settings screen, can traverse to logout screen or home screen from here
+ */
 package com.example.pickem.user
 
 import androidx.compose.foundation.layout.Arrangement
@@ -14,7 +17,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -31,6 +35,12 @@ fun SettingsScreen(
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "Home")
+        }
+        Button(
+            onClick = onLoginClick,
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "logout")
         }
     }
 }

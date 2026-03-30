@@ -8,6 +8,8 @@ import androidx.compose.runtime.*
 import com.example.pickem.games.GamesScreen
 import com.example.pickem.home.HomeScreen
 import com.example.pickem.login.LoginScreen
+import com.example.pickem.user.HistoryScreen
+import com.example.pickem.user.ProfileScreen
 import com.example.pickem.user.SettingsScreen
 
 class MainActivity : ComponentActivity() {
@@ -27,20 +29,26 @@ fun App() {
 
     when (currentScreen) {
         "home" -> HomeScreen(
-            onLoginClick = {
-                currentScreen = "login"
-            },
             onSettingsClick = {
                 currentScreen = "settings"
             },
             onGamesClick = {
                 currentScreen = "games"
+            },
+            onHistoryClick = {
+                currentScreen = "history"
+            },
+            onProfileClick = {
+                currentScreen = "profile"
             }
         )
 
         "settings" -> SettingsScreen(
             onBackClick = {
                 currentScreen = "home"
+            },
+            onLoginClick = {
+                currentScreen = "login"
             }
         )
 
@@ -51,6 +59,18 @@ fun App() {
         )
 
         "games" -> GamesScreen (
+            onBackClick = {
+                currentScreen = "home"
+            }
+        )
+
+        "history" -> HistoryScreen (
+            onBackClick = {
+                currentScreen = "home"
+            }
+        )
+
+        "profile" -> ProfileScreen (
             onBackClick = {
                 currentScreen = "home"
             }
