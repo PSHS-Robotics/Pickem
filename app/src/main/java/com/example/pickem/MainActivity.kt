@@ -8,7 +8,7 @@ import androidx.compose.runtime.*
 import com.example.pickem.games.GamesScreen
 import com.example.pickem.home.HomeScreen
 import com.example.pickem.login.LoginScreen
-import com.example.pickem.settings.SettingsScreen
+import com.example.pickem.user.SettingsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

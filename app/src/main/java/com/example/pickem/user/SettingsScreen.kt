@@ -1,4 +1,4 @@
-package com.example.pickem.settings
+package com.example.pickem.user
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.pickem.login.TextBox
 
 
 @Composable
