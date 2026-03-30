@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import com.example.pickem.games.GamesScreen
 import com.example.pickem.home.HomeScreen
 import com.example.pickem.login.LoginScreen
 import com.example.pickem.settings.SettingsScreen
@@ -31,6 +32,9 @@ fun App() {
             },
             onSettingsClick = {
                 currentScreen = "settings"
+            },
+            onGamesClick = {
+                currentScreen = "games"
             }
         )
 
@@ -41,6 +45,12 @@ fun App() {
         )
 
         "login" -> LoginScreen(
+            onBackClick = {
+                currentScreen = "home"
+            }
+        )
+
+        "games" -> GamesScreen (
             onBackClick = {
                 currentScreen = "home"
             }
