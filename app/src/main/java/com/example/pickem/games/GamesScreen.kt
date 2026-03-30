@@ -1,3 +1,6 @@
+/*
+* Screen with current game displayed
+* */
 package com.example.pickem.games
 
 import androidx.compose.foundation.layout.Arrangement
