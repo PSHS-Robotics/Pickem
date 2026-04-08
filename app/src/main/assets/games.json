@@ -1,0 +1,37 @@
+{
+  "games": [
+    {
+      "id": "game_1",
+      "awayTeam": "Boston Celtics",
+      "homeTeam": "Milwaukee Bucks",
+      "sportsbookLine": {
+        "overUnder": 228.5,
+        "homeMoneyline": -145,
+        "awayMoneyline": 125,
+        "homeSpread": -3.5
+      }
+    },
+    {
+      "id": "game_2",
+      "awayTeam": "Los Angeles Lakers",
+      "homeTeam": "Denver Nuggets",
+      "sportsbookLine": {
+        "overUnder": 232.0,
+        "homeMoneyline": -160,
+        "awayMoneyline": 135,
+        "homeSpread": -4.0
+      }
+    },
+    {
+      "id": "game_3",
+      "awayTeam": "Phoenix Suns",
+      "homeTeam": "Golden State Warriors",
+      "sportsbookLine": {
+        "overUnder": 234.5,
+        "homeMoneyline": -110,
+        "awayMoneyline": -105,
+        "homeSpread": -1.5
+      }
+    }
+  ]
+}
