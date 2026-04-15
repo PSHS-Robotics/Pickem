@@ -1,0 +1,27 @@
+[
+  {
+    "username": "john",
+    "password": "1234",
+    "userID": "0000",
+    "balance": 50,
+    "history": [
+      {
+        "gameID": 2,
+        "amountBet": 12.12,
+        "winBool": "True",
+        "amountWon": 20.00
+      },
+      {
+        "gameID": 2,
+        "amountBet": 12.12,
+        "winBool": "True",
+        "amountWon": 20.00
+      }
+    ]
+  },
+  {
+    "username": "bob",
+    "password": "password",
+    "userID": "0001"
+  }
+]

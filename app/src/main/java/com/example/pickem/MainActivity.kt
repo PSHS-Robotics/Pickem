@@ -11,6 +11,7 @@ import com.example.pickem.login.LoginScreen
 import com.example.pickem.user.HistoryScreen
 import com.example.pickem.user.ProfileScreen
 import com.example.pickem.user.SettingsScreen
+import com.example.pickem.user.User
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +27,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     var currentScreen by remember { mutableStateOf("login") }
+    var currentUser by remember { mutableStateOf<User?>(null) }
+
+    val filePath = "app/src/main/assets/defUser.json"
 
     when (currentScreen) {
         "home" -> HomeScreen(
@@ -53,7 +57,9 @@ fun App() {
         )
 
         "login" -> LoginScreen(
-            onBackClick = {
+            filePath = filePath,
+            onLoginSuccess = { user ->
+                currentUser = user
                 currentScreen = "home"
             }
         )

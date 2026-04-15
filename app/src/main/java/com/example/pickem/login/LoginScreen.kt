@@ -15,11 +15,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.pickem.user.User
 
 @Composable
 fun LoginScreen(
-    onBackClick: () -> Unit
+    filePath: String,
+    onLoginSuccess: (User) -> Unit
 ) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -27,27 +33,38 @@ fun LoginScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextBox("username")
-        TextBox("password")
+        TextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Username") }
+        )
+
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") }
+        )
 
         Button(
-            onClick = onBackClick,
+            onClick = {
+                val user = login(filePath, username, password)
+                if (user != null) {
+                    onLoginSuccess(user)
+                }
+                else
+                    errorMessage = "Invalid username or password"
+
+            },
             modifier = Modifier.padding(top = 16.dp)
         ) {
             Text(text = "login")
         }
+        if (errorMessage != null) {
+            Text(
+                text = errorMessage!!,
+                color = androidx.compose.material3.MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
     }
-}
-
-@Composable
-fun TextBox(
-    labelText: String
-) {
-    var text by remember { mutableStateOf("") }
-
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        label = { Text(labelText) }
-    )
 }
