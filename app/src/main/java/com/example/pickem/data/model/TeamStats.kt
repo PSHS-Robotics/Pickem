@@ -4,4 +4,12 @@
  */
 package com.example.pickem.data.model
 
-data class TeamStats(val teamName: String = "")
+data class TeamStats(
+    val teamName: String,
+    val teamTwoPointMakesPerGame: Double,
+    val teamThreePointMakesPerGame: Double,
+    val teamFreeThrowsMadePerGame: Double,
+    val teamTwoPointMakesAllowedPerGame: Double,
+    val teamThreePointMakesAllowedPerGame: Double,
+    val teamFreeThrowsMadeAllowedPerGame: Double
+)
