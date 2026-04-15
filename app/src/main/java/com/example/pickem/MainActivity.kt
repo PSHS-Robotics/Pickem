@@ -4,7 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import com.example.pickem.games.GamesScreen
 import com.example.pickem.home.HomeScreen
 import com.example.pickem.login.LoginScreen
@@ -26,60 +31,42 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App() {
+    val context = LocalContext.current
+
     var currentScreen by remember { mutableStateOf("login") }
     var currentUser by remember { mutableStateOf<User?>(null) }
 
-    val filePath = "app/src/main/assets/defUser.json"
-
     when (currentScreen) {
         "home" -> HomeScreen(
-            onSettingsClick = {
-                currentScreen = "settings"
-            },
-            onGamesClick = {
-                currentScreen = "games"
-            },
-            onHistoryClick = {
-                currentScreen = "history"
-            },
-            onProfileClick = {
-                currentScreen = "profile"
-            }
+            onSettingsClick = { currentScreen = "settings" },
+            onGamesClick = { currentScreen = "games" },
+            onHistoryClick = { currentScreen = "history" },
+            onProfileClick = { currentScreen = "profile" }
         )
 
         "settings" -> SettingsScreen(
-            onBackClick = {
-                currentScreen = "home"
-            },
-            onLoginClick = {
-                currentScreen = "login"
-            }
+            onBackClick = { currentScreen = "home" },
+            onLoginClick = { currentScreen = "login" }
         )
 
         "login" -> LoginScreen(
-            filePath = filePath,
+            context = context,
             onLoginSuccess = { user ->
                 currentUser = user
                 currentScreen = "home"
             }
         )
 
-        "games" -> GamesScreen (
-            onBackClick = {
-                currentScreen = "home"
-            }
+        "games" -> GamesScreen(
+            onBackClick = { currentScreen = "home" }
         )
 
-        "history" -> HistoryScreen (
-            onBackClick = {
-                currentScreen = "home"
-            }
+        "history" -> HistoryScreen(
+            onBackClick = { currentScreen = "home" }
         )
 
-        "profile" -> ProfileScreen (
-            onBackClick = {
-                currentScreen = "home"
-            }
+        "profile" -> ProfileScreen(
+            onBackClick = { currentScreen = "home" }
         )
     }
 }
