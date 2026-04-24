@@ -1,0 +1,80 @@
+{
+  "teams": [
+    {
+      "teamName": "Denver Nuggets",
+      "teamTwoPointMakesPerGame": 29.4,
+      "teamThreePointMakesPerGame": 14.2,
+      "teamFreeThrowsMadePerGame": 20.8,
+      "teamTwoPointMakesAllowedPerGame": 29.1,
+      "teamThreePointMakesAllowedPerGame": 13.6,
+      "teamFreeThrowsMadeAllowedPerGame": 17.8
+    },
+    {
+      "teamName": "Boston Celtics",
+      "teamTwoPointMakesPerGame": 26.7,
+      "teamThreePointMakesPerGame": 15.5,
+      "teamFreeThrowsMadePerGame": 15.1,
+      "teamTwoPointMakesAllowedPerGame": 24.3,
+      "teamThreePointMakesAllowedPerGame": 14.0,
+      "teamFreeThrowsMadeAllowedPerGame": 16.4
+    },
+    {
+      "teamName": "Milwaukee Bucks",
+      "teamTwoPointMakesPerGame": 25.7,
+      "teamThreePointMakesPerGame": 15.1,
+      "teamFreeThrowsMadePerGame": 13.9,
+      "teamTwoPointMakesAllowedPerGame": 26.7,
+      "teamThreePointMakesAllowedPerGame": 14.8,
+      "teamFreeThrowsMadeAllowedPerGame": 18.9
+    },
+    {
+      "teamName": "Los Angeles Lakers",
+      "teamTwoPointMakesPerGame": 31.0,
+      "teamThreePointMakesPerGame": 11.8,
+      "teamFreeThrowsMadePerGame": 18.9,
+      "teamTwoPointMakesAllowedPerGame": 28.7,
+      "teamThreePointMakesAllowedPerGame": 13.4,
+      "teamFreeThrowsMadeAllowedPerGame": 17.1
+    },
+
+    {
+      "teamName": "Phoenix Suns",
+      "teamTwoPointMakesPerGame": 26.2,
+      "teamThreePointMakesPerGame": 14.8,
+      "teamFreeThrowsMadePerGame": 15.8,
+      "teamTwoPointMakesAllowedPerGame": 28.0,
+      "teamThreePointMakesAllowedPerGame": 12.2,
+      "teamFreeThrowsMadeAllowedPerGame": 18.6
+    },
+
+    {
+      "teamName": "Oklahoma City Thunder",
+      "teamTwoPointMakesPerGame": 29.3,
+      "teamThreePointMakesPerGame": 13.8,
+      "teamFreeThrowsMadePerGame": 19.0,
+      "teamTwoPointMakesAllowedPerGame": 24.3,
+      "teamThreePointMakesAllowedPerGame": 14.3,
+      "teamFreeThrowsMadeAllowedPerGame": 16.2
+    },
+
+    {
+      "teamName": "Detroit Pistons",
+      "teamTwoPointMakesPerGame": 32.4,
+      "teamThreePointMakesPerGame": 11.0,
+      "teamFreeThrowsMadePerGame": 19.9,
+      "teamTwoPointMakesAllowedPerGame": 24.3,
+      "teamThreePointMakesAllowedPerGame": 14.3,
+      "teamFreeThrowsMadeAllowedPerGame": 16.2
+    },
+
+    {
+      "teamName": "Golden State Warriors",
+      "teamTwoPointMakesPerGame": 25.3,
+      "teamThreePointMakesPerGame": 15.7,
+      "teamFreeThrowsMadePerGame": 17.0,
+      "teamTwoPointMakesAllowedPerGame": 29.4,
+      "teamThreePointMakesAllowedPerGame": 12.9,
+      "teamFreeThrowsMadeAllowedPerGame": 17.5
+    }
+  ]
+}
