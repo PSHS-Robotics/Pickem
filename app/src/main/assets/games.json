@@ -1,7 +1,7 @@
 {
   "games": [
     {
-      "id": "game_1",
+      "id": "3f5c2c8a-91e4-4c2d-9b6a-8d7f2a1e5b44",
       "awayTeam": "Boston Celtics",
       "homeTeam": "Milwaukee Bucks",
       "sportsbookLine": {
@@ -12,7 +12,7 @@
       }
     },
     {
-      "id": "game_2",
+      "id": "9c2e7a41-5f88-4d3b-9a12-3e7c6f1b2d90",
       "awayTeam": "Los Angeles Lakers",
       "homeTeam": "Denver Nuggets",
       "sportsbookLine": {
@@ -23,7 +23,7 @@
       }
     },
     {
-      "id": "game_3",
+      "id": "a1b9d6f2-7c34-4e5a-8f21-6d9c3b2a7e10",
       "awayTeam": "Phoenix Suns",
       "homeTeam": "Golden State Warriors",
       "sportsbookLine": {

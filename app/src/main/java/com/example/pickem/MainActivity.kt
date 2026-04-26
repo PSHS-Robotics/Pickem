@@ -17,6 +17,7 @@ import com.example.pickem.user.HistoryScreen
 import com.example.pickem.user.ProfileScreen
 import com.example.pickem.user.SettingsScreen
 import com.example.pickem.user.User
+import com.example.pickem.user.UserRepository
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,9 @@ fun App() {
         )
 
         "history" -> HistoryScreen(
+            user = UserRepository.currentUser,
             onBackClick = { currentScreen = "home" }
+
         )
 
         "profile" -> ProfileScreen(
