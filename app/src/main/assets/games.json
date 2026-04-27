@@ -13,24 +13,35 @@
     },
     {
       "id": "game_2",
-      "awayTeam": "Los Angeles Lakers",
-      "homeTeam": "Denver Nuggets",
+      "awayTeam": "New York Knicks",
+      "homeTeam": "Atlanta Hawks",
       "sportsbookLine": {
-        "overUnder": 232.0,
-        "homeMoneyline": -160,
-        "awayMoneyline": 135,
-        "homeSpread": -4.0
+        "overUnder": 214.5,
+        "homeMoneyline": 100,
+        "awayMoneyline": -120,
+        "homeSpread": 1.5
+      }
+    },
+    {
+      "id": "game_4",
+      "awayTeam": "Detroit Pistons",
+      "homeTeam": "Orlando Magic",
+      "sportsbookLine": {
+        "overUnder": 215.5,
+        "homeMoneyline": 115,
+        "awayMoneyline": -135,
+        "homeSpread": 2
       }
     },
     {
       "id": "game_3",
-      "awayTeam": "Phoenix Suns",
-      "homeTeam": "Golden State Warriors",
+      "awayTeam": "Boston Celtics",
+      "homeTeam": "Philadelphia 76ers",
       "sportsbookLine": {
-        "overUnder": 234.5,
-        "homeMoneyline": -110,
-        "awayMoneyline": -105,
-        "homeSpread": -1.5
+        "overUnder": 215.0,
+        "homeMoneyline": 280,
+        "awayMoneyline": -350,
+        "homeSpread": 8
       }
     }
   ]

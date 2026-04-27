@@ -10,6 +10,15 @@
       "teamFreeThrowsMadeAllowedPerGame": 17.8
     },
     {
+      "teamName": "Orlando Magic",
+      "teamTwoPointMakesPerGame": 29.3,
+      "teamThreePointMakesPerGame": 11.7,
+      "teamFreeThrowsMadePerGame": 22.0,
+      "teamTwoPointMakesAllowedPerGame": 29.6,
+      "teamThreePointMakesAllowedPerGame": 12.1,
+      "teamFreeThrowsMadeAllowedPerGame": 19.6
+    },
+    {
       "teamName": "Boston Celtics",
       "teamTwoPointMakesPerGame": 26.7,
       "teamThreePointMakesPerGame": 15.5,
@@ -75,6 +84,36 @@
       "teamTwoPointMakesAllowedPerGame": 29.4,
       "teamThreePointMakesAllowedPerGame": 12.9,
       "teamFreeThrowsMadeAllowedPerGame": 17.5
+    },
+
+    {
+      "teamName": "New York Knicks",
+      "teamTwoPointMakesPerGame": 28.4,
+      "teamThreePointMakesPerGame": 14.2,
+      "teamFreeThrowsMadePerGame": 16.8,
+      "teamTwoPointMakesAllowedPerGame": 25.4,
+      "teamThreePointMakesAllowedPerGame": 13.9,
+      "teamFreeThrowsMadeAllowedPerGame": 17.6
+    },
+
+    {
+      "teamName": "Philadelphia 76ers",
+      "teamTwoPointMakesPerGame": 29.4,
+      "teamThreePointMakesPerGame": 12.3,
+      "teamFreeThrowsMadePerGame": 20.1,
+      "teamTwoPointMakesAllowedPerGame": 28.5,
+      "teamThreePointMakesAllowedPerGame": 13.4,
+      "teamFreeThrowsMadeAllowedPerGame": 19.0
+    },
+
+    {
+      "teamName": "Atlanta Hawks",
+      "teamTwoPointMakesPerGame": 29.0,
+      "teamThreePointMakesPerGame": 14.6,
+      "teamFreeThrowsMadePerGame": 16.6,
+      "teamTwoPointMakesAllowedPerGame": 29.5,
+      "teamThreePointMakesAllowedPerGame": 12.9,
+      "teamFreeThrowsMadeAllowedPerGame": 18.5
     }
   ]
 }
