@@ -14,7 +14,6 @@ import com.example.pickem.games.GamesScreen
 import com.example.pickem.home.HomeScreen
 import com.example.pickem.login.LoginScreen
 import com.example.pickem.user.HistoryScreen
-import com.example.pickem.user.ProfileScreen
 import com.example.pickem.user.SettingsScreen
 import com.example.pickem.user.User
 import com.example.pickem.user.UserRepository
