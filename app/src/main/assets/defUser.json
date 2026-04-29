@@ -1,0 +1,42 @@
+[
+  {
+    "username": "john",
+    "password": "1234",
+    "userID": "0000",
+    "balance": 50,
+    "history": [
+      {
+        "gameID": "3f5c2c8a-91e4-4c2d-9b6a-8d7f2a1e5b44",
+        "amountBet": 12.12,
+        "win": true,
+        "amountWon": 20.00
+      },
+      {
+        "gameID": "a1b9d6f2-7c34-4e5a-8f21-6d9c3b2a7e10",
+        "amountBet": 12.12,
+        "win": true,
+        "amountWon": 20.00
+      }
+    ]
+  },
+  {
+    "username": "Bob",
+    "password": "password",
+    "userID": "0001",
+    "balance": 50,
+    "history": [
+      {
+        "gameID": "9c2e7a41-5f88-4d3b-9a12-3e7c6f1b2d90",
+        "amountBet": 12.12,
+        "win": true,
+        "amountWon": 20.00
+      },
+      {
+        "gameID": "a1b9d6f2-7c34-4e5a-8f21-6d9c3b2a7e10",
+        "amountBet": 12.12,
+        "win": true,
+        "amountWon": 20.00
+      }
+    ]
+  }
+]

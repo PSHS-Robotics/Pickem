@@ -1,9 +1,31 @@
-/*
- * This ViewModel is the place for login-screen state and login-screen logic once login becomes more real.
- * It can later hold username input, validation state, and local sign-in flow without putting that logic in the screen file.
- */
 package com.example.pickem.login
 
-import androidx.lifecycle.ViewModel
+import android.content.Context
+import com.example.pickem.user.User
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
-class LoginViewModel : ViewModel()
+fun login(context: Context, username: String, password: String): User? {
+    val users = loadUsersFromAssets(context)
+
+    for (user in users) {
+        if (user.username == username && user.password == password) {
+            return user
+        }
+    }
+
+    return null
+}
+
+fun loadUsersFromAssets(context: Context): List<User> {
+    return try {
+        val json = context.assets.open("defUser.json")
+            .bufferedReader()
+            .use { it.readText() }
+
+        val type = object : TypeToken<List<User>>() {}.type
+        Gson().fromJson(json, type) ?: emptyList()
+    } catch (e: Exception) {
+        emptyList()
+    }
+}
