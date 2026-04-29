@@ -3,6 +3,7 @@
  */
 package com.example.pickem.user
 
+import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +19,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsScreen(
     onBackClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    user: User?
 ) {
     Column(
         modifier = Modifier
@@ -28,8 +30,8 @@ fun SettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Settings")
-
-
+        Text("user: ${user?.username} ")
+        Text("balance: ${user?.balance}")
         Button(
             onClick = onBackClick,
             modifier = Modifier.padding(top = 16.dp)

@@ -1,5 +1,7 @@
 package com.example.pickem.user
 
+import kotlin.math.abs
+
 object UserRepository {
 
     var currentUser: User? = null
@@ -8,9 +10,18 @@ object UserRepository {
         gameId: String,
         amountBet: Double,
         win: Boolean,
-        amountWon: Double
+        odds: Double,
+
     ) {
         val user = currentUser ?: return
+
+        var amountWon = 0.0
+        if (odds >= 0){
+            amountWon = amountBet * odds
+        } else {
+            amountWon = amountBet * 1 - abs(odds)
+        }
+
 
         val bet = BetHistory(
             gameID = gameId,

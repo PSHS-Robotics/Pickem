@@ -46,6 +46,7 @@ fun App() {
         )
 
         "settings" -> SettingsScreen(
+            user = UserRepository.currentUser,
             onBackClick = { currentScreen = "home" },
             onLoginClick = { currentScreen = "login" }
         )
