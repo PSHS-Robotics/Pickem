@@ -18,6 +18,7 @@ import com.example.pickem.user.ProfileScreen
 import com.example.pickem.user.SettingsScreen
 import com.example.pickem.user.User
 import com.example.pickem.user.UserRepository
+import com.example.pickem.user.UserRepository.currentUser
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +36,7 @@ fun App() {
     val context = LocalContext.current
 
     var currentScreen by remember { mutableStateOf("login") }
-    var currentUser by remember { mutableStateOf<User?>(null) }
+    //var currentUser by remember { mutableStateOf<User?>(null) }
 
     when (currentScreen) {
         "home" -> HomeScreen(
@@ -74,8 +75,5 @@ fun App() {
 
         )
 
-        "profile" -> ProfileScreen(
-            onBackClick = { currentScreen = "home" }
-        )
     }
 }

@@ -26,7 +26,6 @@ fun HomeScreen(
     onHistoryClick: () -> Unit,
     onProfileClick: () -> Unit
 ) {
-    val games = remember { mutableListOf("game1", "game2") }
 
     Box(modifier = Modifier.fillMaxSize()) {
         UserHeader(modifier = Modifier.align(Alignment.TopCenter))
@@ -38,7 +37,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Home Screen")
+
 
             Button(
                 onClick = onGamesClick,
@@ -50,14 +49,10 @@ fun HomeScreen(
             UserDropdown(
                 onSettingsClick = onSettingsClick,
                 onHistoryClick = onHistoryClick,
-                onProfileClick = onProfileClick
+
             )
 
-            Column(modifier = Modifier.padding(top = 16.dp)) {
-                games.forEach { game ->
-                    Text(text = game)
-                }
-            }
+
         }
     }
 }
@@ -66,7 +61,7 @@ fun HomeScreen(
 fun UserDropdown(
     onSettingsClick: () -> Unit,
     onHistoryClick: () -> Unit,
-    onProfileClick: () -> Unit
+
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -79,13 +74,6 @@ fun UserDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            DropdownMenuItem(
-                text = { Text("Profile") },
-                onClick = {
-                    onProfileClick()
-                    expanded = false
-                }
-            )
 
             DropdownMenuItem(
                 text = { Text("History") },
