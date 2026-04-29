@@ -161,16 +161,7 @@ private fun GameHeader(
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            StatusPill(
-                text = if (prediction == null) "Awaiting analysis" else "Analysis ready",
-                modifier = Modifier.weight(1f)
-            )
-            StatusPill(
-                text = "Same-card insights",
-                modifier = Modifier.weight(1f)
-            )
-        }
+        ) {}
     }
 }
 
