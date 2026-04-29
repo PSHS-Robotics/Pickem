@@ -5,7 +5,14 @@ import java.util.UUID
 data class BetHistory(
     val id: String = UUID.randomUUID().toString(),
     val gameID: String,
+    val awayTeam: String,
+    val homeTeam: String,
+    val betType: String,
+    val selectedSide: String,
+    val line: Double?,
+    val odds: Int,
     val amountBet: Double,
+    val potentialProfit: Double,
     val win: Boolean,
     val amountWon: Double
 )

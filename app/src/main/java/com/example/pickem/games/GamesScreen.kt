@@ -14,23 +14,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
 import com.example.pickem.data.model.Game
 import com.example.pickem.data.model.ModelPrediction
+import com.example.pickem.user.UserHeader
+import com.example.pickem.user.UserRepository
 import java.util.Locale
 
 private const val STANDARD_SIDE_PRICE = -110
@@ -60,6 +67,8 @@ fun GamesScreen(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.Start
     ) {
+        UserHeader()
+
         Text(
             text = "Games",
             style = MaterialTheme.typography.headlineSmall,
@@ -71,7 +80,16 @@ fun GamesScreen(
                 game = game,
                 prediction = gamesViewModel.getPredictionForGame(game.id),
                 isAnalyzing = gamesViewModel.isAnalyzingGame(game.id),
-                onAnalyzeClick = { gamesViewModel.analyzeGame(context, game) }
+                onAnalyzeClick = { gamesViewModel.analyzeGame(context, game) },
+                onBetClick = { betOption -> gamesViewModel.startBet(context, game, betOption) }
+            )
+        }
+
+        gamesViewModel.resultMessage?.let { message ->
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold
             )
         }
 
@@ -82,6 +100,8 @@ fun GamesScreen(
             Text(text = "Home")
         }
     }
+
+    BetDialog(gamesViewModel = gamesViewModel)
 }
 
 /**
@@ -92,7 +112,8 @@ fun GameCard(
     game: Game,
     prediction: ModelPrediction?,
     isAnalyzing: Boolean,
-    onAnalyzeClick: () -> Unit
+    onAnalyzeClick: () -> Unit,
+    onBetClick: (BetOption) -> Unit
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -106,7 +127,10 @@ fun GameCard(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             GameHeader(game = game, prediction = prediction)
-            SportsbookSection(game = game)
+            SportsbookSection(
+                game = game,
+                onBetClick = onBetClick
+            )
             ActionRow(
                 isAnalyzing = isAnalyzing,
                 onAnalyzeClick = onAnalyzeClick
@@ -154,39 +178,168 @@ private fun GameHeader(
  * Shows the sportsbook lines so the user can compare the offer to the model price.
  */
 @Composable
-fun SportsbookSection(game: Game) {
+fun SportsbookSection(
+    game: Game,
+    onBetClick: (BetOption) -> Unit
+) {
     val awaySpread = -game.sportsbookLine.homeSpread
 
     SectionCard(
         title = "Sportsbook",
         subtitle = "Current line and assumed market price"
     ) {
-        TwoColumnGrid {
-            MetricTile(
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            BetLineRow(
                 label = "${game.awayTeam} ML",
-                value = formatAmericanOdds(game.sportsbookLine.awayMoneyline)
+                value = formatAmericanOdds(game.sportsbookLine.awayMoneyline),
+                onBetClick = { onBetClick(BetOption.AwayMoneyline) }
             )
-            MetricTile(
+            BetLineRow(
                 label = "${game.homeTeam} ML",
-                value = formatAmericanOdds(game.sportsbookLine.homeMoneyline)
+                value = formatAmericanOdds(game.sportsbookLine.homeMoneyline),
+                onBetClick = { onBetClick(BetOption.HomeMoneyline) }
             )
-            MetricTile(
+            BetLineRow(
                 label = "${game.awayTeam} Spread",
-                value = "${formatSpread(awaySpread)}  •  ${formatAmericanOdds(STANDARD_SIDE_PRICE)}"
+                value = "${formatSpread(awaySpread)} (${formatAmericanOdds(STANDARD_SIDE_PRICE)})",
+                onBetClick = { onBetClick(BetOption.AwaySpread) }
             )
-            MetricTile(
+            BetLineRow(
                 label = "${game.homeTeam} Spread",
-                value = "${formatSpread(game.sportsbookLine.homeSpread)}  •  ${formatAmericanOdds(STANDARD_SIDE_PRICE)}"
+                value = "${formatSpread(game.sportsbookLine.homeSpread)} (${formatAmericanOdds(STANDARD_SIDE_PRICE)})",
+                onBetClick = { onBetClick(BetOption.HomeSpread) }
             )
-            MetricTile(
-                label = "Total",
-                value = formatDouble(game.sportsbookLine.overUnder)
+            BetLineRow(
+                label = "Over",
+                value = "${formatDouble(game.sportsbookLine.overUnder)} (${formatAmericanOdds(STANDARD_SIDE_PRICE)})",
+                onBetClick = { onBetClick(BetOption.Over) }
             )
-            MetricTile(
-                label = "Market Price",
-                value = "${formatAmericanOdds(STANDARD_SIDE_PRICE)} spread / total"
+            BetLineRow(
+                label = "Under",
+                value = "${formatDouble(game.sportsbookLine.overUnder)} (${formatAmericanOdds(STANDARD_SIDE_PRICE)})",
+                onBetClick = { onBetClick(BetOption.Under) }
             )
         }
+    }
+}
+
+@Composable
+private fun BetLineRow(
+    label: String,
+    value: String,
+    onBetClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+            OutlinedButton(onClick = onBetClick) {
+                Text("Bet")
+            }
+        }
+    }
+}
+
+@Composable
+private fun BetDialog(gamesViewModel: GamesViewModel) {
+    val context = LocalContext.current
+    val selectedBet = gamesViewModel.selectedBet ?: return
+    val balance = UserRepository.currentUser?.balance ?: 0.0
+    val potentialProfit = gamesViewModel.potentialProfitForCurrentWager()
+    val wagerAmount = gamesViewModel.wagerAmount.toDoubleOrNull()
+
+    if (gamesViewModel.isConfirmingBet) {
+        AlertDialog(
+            onDismissRequest = { gamesViewModel.dismissBetDialog() },
+            title = { Text("Confirm Bet") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("${selectedBet.awayTeam} at ${selectedBet.homeTeam}")
+                    Text("${selectedBet.betType}: ${selectedBet.selectedSide}")
+                    Text("Odds: ${formatAmericanOdds(selectedBet.odds)}")
+                    Text("Wager: ${formatMoney(wagerAmount ?: 0.0)}")
+                    Text("Potential Profit: ${formatMoney(potentialProfit ?: 0.0)}")
+                    Text("Total Payout: ${formatMoney((wagerAmount ?: 0.0) + (potentialProfit ?: 0.0))}")
+                    gamesViewModel.validationError?.let {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(onClick = { gamesViewModel.placeSelectedBet(context) }) {
+                    Text("Confirm")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { gamesViewModel.returnToAmountEntry() }) {
+                    Text("Back")
+                }
+            }
+        )
+    } else {
+        AlertDialog(
+            onDismissRequest = { gamesViewModel.dismissBetDialog() },
+            title = { Text("Place Bet") },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("${selectedBet.awayTeam} at ${selectedBet.homeTeam}")
+                    Text("${selectedBet.betType}: ${selectedBet.selectedSide}")
+                    Text("Odds: ${formatAmericanOdds(selectedBet.odds)}")
+                    Text("Current Balance: ${formatMoney(balance)}")
+                    OutlinedTextField(
+                        value = gamesViewModel.wagerAmount,
+                        onValueChange = { gamesViewModel.updateWagerAmount(it) },
+                        label = { Text("Wager Amount") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true
+                    )
+                    gamesViewModel.validationError?.let {
+                        Text(
+                            text = it,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(onClick = { gamesViewModel.moveToConfirmation() }) {
+                    Text("Next")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { gamesViewModel.dismissBetDialog() }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }
 
@@ -716,6 +869,10 @@ fun formatPercent(value: Double): String {
  */
 fun formatAmericanOdds(odds: Int): String {
     return if (odds > 0) "+$odds" else odds.toString()
+}
+
+fun formatMoney(amount: Double): String {
+    return String.format(Locale.US, "$%.2f", amount)
 }
 
 /**

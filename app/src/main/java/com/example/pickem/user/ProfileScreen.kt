@@ -1,6 +1,7 @@
 package com.example.pickem.user
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,21 +16,25 @@ import androidx.compose.ui.unit.dp
 fun ProfileScreen(
     onBackClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Profile")
+    Box(modifier = Modifier.fillMaxSize()) {
+        UserHeader(modifier = Modifier.align(Alignment.TopCenter))
 
-
-        Button(
-            onClick = onBackClick,
-            modifier = Modifier.padding(top = 16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Home")
+            Text("Profile")
+
+
+            Button(
+                onClick = onBackClick,
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text(text = "Home")
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.pickem.login
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.pickem.user.User
+import com.example.pickem.user.UserHeader
 
 @Composable
 fun LoginScreen(
@@ -30,53 +32,57 @@ fun LoginScreen(
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        TextField(
-            value = username,
-            onValueChange = {
-                username = it
-                errorMessage = null
-            },
-            label = { Text("Username") }
-        )
+    Box(modifier = Modifier.fillMaxSize()) {
+        UserHeader(modifier = Modifier.align(Alignment.TopCenter))
 
-        TextField(
-            value = password,
-            onValueChange = {
-                password = it
-                errorMessage = null
-            },
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default
-        )
-
-        Button(
-            onClick = {
-                val user = login(context, username.trim(), password)
-                if (user != null) {
-                    onLoginSuccess(user)
-                } else {
-                    errorMessage = "Invalid username or password"
-                }
-            },
-            modifier = Modifier.padding(top = 16.dp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Login")
-        }
-
-        if (errorMessage != null) {
-            Text(
-                text = errorMessage!!,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(top = 8.dp)
+            TextField(
+                value = username,
+                onValueChange = {
+                    username = it
+                    errorMessage = null
+                },
+                label = { Text("Username") }
             )
+
+            TextField(
+                value = password,
+                onValueChange = {
+                    password = it
+                    errorMessage = null
+                },
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions.Default
+            )
+
+            Button(
+                onClick = {
+                    val user = login(context, username.trim(), password)
+                    if (user != null) {
+                        onLoginSuccess(user)
+                    } else {
+                        errorMessage = "Invalid username or password"
+                    }
+                },
+                modifier = Modifier.padding(top = 16.dp)
+            ) {
+                Text("Login")
+            }
+
+            if (errorMessage != null) {
+                Text(
+                    text = errorMessage!!,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
         }
     }
 }
