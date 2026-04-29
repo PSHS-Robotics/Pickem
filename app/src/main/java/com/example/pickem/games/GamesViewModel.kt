@@ -17,6 +17,9 @@ import com.example.pickem.data.model.Game
 import com.example.pickem.data.model.ModelPrediction
 import com.example.pickem.data.repository.GameRepository
 import com.example.pickem.data.repository.PredictionRepository
+import com.example.pickem.user.BetHistory
+import com.example.pickem.user.UserRepository
+import kotlin.random.Random
 
 class GamesViewModel(
     private val gameRepository: GameRepository = GameRepository(),
@@ -28,6 +31,21 @@ class GamesViewModel(
 
     val predictionsByGameId: SnapshotStateMap<String, ModelPrediction> = mutableStateMapOf()
     val analyzingGameIds: SnapshotStateMap<String, Boolean> = mutableStateMapOf()
+
+    var selectedBet by mutableStateOf<SelectedBet?>(null)
+        private set
+
+    var wagerAmount by mutableStateOf("")
+        private set
+
+    var isConfirmingBet by mutableStateOf(false)
+        private set
+
+    var validationError by mutableStateOf<String?>(null)
+        private set
+
+    var resultMessage by mutableStateOf<String?>(null)
+        private set
 
     /**
      * Loads the seeded games once and logs any team names that do not exist in the team stats asset.
@@ -77,6 +95,176 @@ class GamesViewModel(
         return analyzingGameIds[gameId] == true
     }
 
+    fun startBet(context: Context, game: Game, betOption: BetOption) {
+        val prediction = predictionsByGameId[game.id] ?: analyzeGameForBet(context, game)
+
+        selectedBet = buildSelectedBet(game, prediction, betOption)
+        wagerAmount = ""
+        isConfirmingBet = false
+        validationError = null
+        resultMessage = null
+    }
+
+    fun updateWagerAmount(value: String) {
+        wagerAmount = value
+        validationError = null
+    }
+
+    fun moveToConfirmation() {
+        if (validateWager() != null) {
+            isConfirmingBet = true
+        }
+    }
+
+    fun returnToAmountEntry() {
+        isConfirmingBet = false
+        validationError = null
+    }
+
+    fun dismissBetDialog() {
+        selectedBet = null
+        wagerAmount = ""
+        isConfirmingBet = false
+        validationError = null
+    }
+
+    fun placeSelectedBet(context: Context) {
+        val bet = selectedBet ?: return
+        val amountBet = validateWager() ?: return
+        val potentialProfit = UserRepository.calculatePotentialProfit(amountBet, bet.odds)
+        val win = Random.nextDouble(0.0, 1.0) <= bet.winProbability
+        val amountWon = if (win) potentialProfit else 0.0
+
+        UserRepository.addBet(
+            context = context,
+            bet = BetHistory(
+                gameID = bet.gameId,
+                awayTeam = bet.awayTeam,
+                homeTeam = bet.homeTeam,
+                betType = bet.betType,
+                selectedSide = bet.selectedSide,
+                line = bet.line,
+                odds = bet.odds,
+                amountBet = amountBet,
+                potentialProfit = potentialProfit,
+                win = win,
+                amountWon = amountWon
+            )
+        )
+
+        resultMessage = if (win) "Bet won!" else "Bet lost."
+        dismissBetDialog()
+    }
+
+    fun potentialProfitForCurrentWager(): Double? {
+        val bet = selectedBet ?: return null
+        val amountBet = wagerAmount.toDoubleOrNull() ?: return null
+        if (amountBet <= 0.0) {
+            return null
+        }
+
+        return UserRepository.calculatePotentialProfit(amountBet, bet.odds)
+    }
+
+    private fun validateWager(): Double? {
+        val user = UserRepository.currentUser
+        val amountBet = wagerAmount.toDoubleOrNull()
+
+        validationError = when {
+            user == null -> "Log in before placing a bet."
+            amountBet == null || amountBet <= 0.0 -> "Enter a valid wager amount."
+            amountBet > user.balance -> "Wager cannot be greater than current balance."
+            else -> null
+        }
+
+        return if (validationError == null) amountBet else null
+    }
+
+    private fun analyzeGameForBet(context: Context, game: Game): ModelPrediction {
+        val predictionResult = predictionRepository.predictGame(context, game)
+        predictionsByGameId[game.id] = predictionResult.modelPrediction
+
+        val summary = buildDeterministicPredictionSummary(predictionResult)
+        Log.d("GamesViewModel", summary)
+
+        return predictionResult.modelPrediction
+    }
+
+    private fun buildSelectedBet(
+        game: Game,
+        prediction: ModelPrediction,
+        betOption: BetOption
+    ): SelectedBet {
+        val awaySpread = -game.sportsbookLine.homeSpread
+
+        return when (betOption) {
+            BetOption.AwayMoneyline -> SelectedBet(
+                gameId = game.id,
+                awayTeam = game.awayTeam,
+                homeTeam = game.homeTeam,
+                betType = "Moneyline",
+                selectedSide = game.awayTeam,
+                line = null,
+                odds = game.sportsbookLine.awayMoneyline,
+                winProbability = prediction.awayTeamWinProbability
+            )
+            BetOption.HomeMoneyline -> SelectedBet(
+                gameId = game.id,
+                awayTeam = game.awayTeam,
+                homeTeam = game.homeTeam,
+                betType = "Moneyline",
+                selectedSide = game.homeTeam,
+                line = null,
+                odds = game.sportsbookLine.homeMoneyline,
+                winProbability = prediction.homeTeamWinProbability
+            )
+            BetOption.AwaySpread -> SelectedBet(
+                gameId = game.id,
+                awayTeam = game.awayTeam,
+                homeTeam = game.homeTeam,
+                betType = "Spread",
+                selectedSide = "${game.awayTeam} ${formatSignedLine(awaySpread)}",
+                line = awaySpread,
+                odds = STANDARD_SIDE_PRICE,
+                winProbability = prediction.awayTeamSpreadCoverProbability
+            )
+            BetOption.HomeSpread -> SelectedBet(
+                gameId = game.id,
+                awayTeam = game.awayTeam,
+                homeTeam = game.homeTeam,
+                betType = "Spread",
+                selectedSide = "${game.homeTeam} ${formatSignedLine(game.sportsbookLine.homeSpread)}",
+                line = game.sportsbookLine.homeSpread,
+                odds = STANDARD_SIDE_PRICE,
+                winProbability = prediction.homeTeamSpreadCoverProbability
+            )
+            BetOption.Over -> SelectedBet(
+                gameId = game.id,
+                awayTeam = game.awayTeam,
+                homeTeam = game.homeTeam,
+                betType = "Total",
+                selectedSide = "Over ${game.sportsbookLine.overUnder}",
+                line = game.sportsbookLine.overUnder,
+                odds = STANDARD_SIDE_PRICE,
+                winProbability = prediction.overProbability
+            )
+            BetOption.Under -> SelectedBet(
+                gameId = game.id,
+                awayTeam = game.awayTeam,
+                homeTeam = game.homeTeam,
+                betType = "Total",
+                selectedSide = "Under ${game.sportsbookLine.overUnder}",
+                line = game.sportsbookLine.overUnder,
+                odds = STANDARD_SIDE_PRICE,
+                winProbability = prediction.underProbability
+            )
+        }
+    }
+
+    private fun formatSignedLine(value: Double): String {
+        return if (value > 0) "+$value" else value.toString()
+    }
+
     /**
      * Builds a readable debug summary of the full prediction output for one matchup.
      */
@@ -117,3 +305,25 @@ class GamesViewModel(
         """.trimIndent()
     }
 }
+
+private const val STANDARD_SIDE_PRICE = -110
+
+enum class BetOption {
+    AwayMoneyline,
+    HomeMoneyline,
+    AwaySpread,
+    HomeSpread,
+    Over,
+    Under
+}
+
+data class SelectedBet(
+    val gameId: String,
+    val awayTeam: String,
+    val homeTeam: String,
+    val betType: String,
+    val selectedSide: String,
+    val line: Double?,
+    val odds: Int,
+    val winProbability: Double
+)
