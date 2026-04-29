@@ -54,6 +54,7 @@ fun App() {
             context = context,
             onLoginSuccess = { user ->
                 currentUser = user
+                UserRepository.currentUser = user
                 currentScreen = "home"
             }
         )
