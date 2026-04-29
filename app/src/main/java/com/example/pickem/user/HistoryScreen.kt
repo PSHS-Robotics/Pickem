@@ -54,10 +54,16 @@ fun HistoryScreen(
     }
 }
 
+/*
+gives odds for game in a readable format
+ */
 private fun formatOdds(odds: Int): String {
     return if (odds > 0) "+$odds" else odds.toString()
 }
 
+/*
+gives money amount in a readable format
+ */
 private fun formatMoney(amount: Double): String {
     return "$${"%.2f".format(amount)}"
 }

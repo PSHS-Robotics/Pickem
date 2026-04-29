@@ -22,6 +22,9 @@ object UserRepository {
     var currentUser by mutableStateOf<User?>(null)
     private var users: List<User> = emptyList()
 
+    /*
+    loads all users to a list from defUser.json
+     */
     fun loadUsers(context: Context): List<User> {
         if (users.isNotEmpty()) {
             return users
@@ -39,6 +42,9 @@ object UserRepository {
         return users
     }
 
+    /*
+    sets current user to the input if the username and password matches and searches user list
+     */
     fun login(context: Context, username: String, password: String): User? {
         val user = loadUsers(context).firstOrNull {
             it.username == username && it.password == password
@@ -48,6 +54,9 @@ object UserRepository {
         return user
     }
 
+    /*
+    adds bet to bet history
+     */
     fun addBet(context: Context, bet: BetHistory) {
         val user = currentUser ?: return
 
@@ -72,6 +81,9 @@ object UserRepository {
         saveUsers(context, users)
     }
 
+    /*
+    calculates potential profit based on the odds and the amount bet
+     */
     fun calculatePotentialProfit(amountBet: Double, odds: Int): Double {
         return if (odds > 0) {
             amountBet * (odds / 100.0)
@@ -80,6 +92,9 @@ object UserRepository {
         }
     }
 
+    /*
+    returns list of users
+     */
     private fun loadUsersFromInternalStorage(file: File): List<User> {
         return try {
             val json = file.readText()

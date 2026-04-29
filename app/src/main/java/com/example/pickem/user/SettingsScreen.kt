@@ -18,6 +18,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+/*
+diplays settings
+ */
 @Composable
 fun SettingsScreen(
     onBackClick: () -> Unit,
@@ -108,11 +111,15 @@ fun SettingsScreen(
             onDismiss = { showDialog = false },
             onAddBalance = { amount ->
                 user?.balance = (user?.balance ?: 0.0) + amount
+
             }
         )
     }
 }
 
+/*
+gives popup which allows user to enter a number, adding it to the balance for that user
+ */
 @Composable
 fun AddBalanceSection(
     onDismiss: () -> Unit,

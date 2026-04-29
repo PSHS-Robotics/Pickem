@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.dp
 import com.example.pickem.user.User
 import com.example.pickem.user.UserHeader
 
+/*
+displays login screen
+ */
 @Composable
 fun LoginScreen(
     context: Context,
