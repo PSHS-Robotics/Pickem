@@ -1,20 +1,21 @@
-/*
-* settings screen, can traverse to logout screen or home screen from here
- */
 package com.example.pickem.user
 
-import android.R.attr.onClick
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
 
 @Composable
 fun SettingsScreen(
@@ -22,27 +23,134 @@ fun SettingsScreen(
     onLoginClick: () -> Unit,
     user: User?
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Settings")
-        Text("user: ${user?.username} ")
-        Text("balance: ${user?.balance}")
-        Button(
-            onClick = onBackClick,
-            modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text(text = "Home")
+
+        Column {
+            Button(onClick = onBackClick) {
+                Text("Back")
+            }
         }
-        Button(
-            onClick = onLoginClick,
-            modifier = Modifier.padding(top = 16.dp)
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(text = "logout")
+
+            Text(
+                text = "Settings",
+                style = MaterialTheme.typography.headlineMedium
+            )
+
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Text(
+                    text = "Username: ${user?.username}",
+                    modifier = Modifier.padding(24.dp),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
+
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = "Password: ${user?.password}",
+                    modifier = Modifier.padding(24.dp),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
+
+            Card(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(24.dp)) {
+
+                    Text(
+                        text = "Balance: $${"%.2f".format(user?.balance ?: 0.0)}",
+                        style = MaterialTheme.typography.headlineMedium
+                    )
+
+                    Button(
+                        onClick = { showDialog = true },
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        Text("Add Balance")
+                    }
+                }
+            }
+        }
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(onClick = onLoginClick) {
+                Text("Logout")
+            }
         }
     }
+
+    if (showDialog) {
+        AddBalanceSection(
+            onDismiss = { showDialog = false },
+            onAddBalance = { amount ->
+                user?.balance = (user?.balance ?: 0.0) + amount
+            }
+        )
+    }
+}
+
+@Composable
+fun AddBalanceSection(
+    onDismiss: () -> Unit,
+    onAddBalance: (Double) -> Unit
+) {
+    var inputAmount by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Add Balance") },
+        text = {
+            Column {
+                Text("Enter amount:")
+
+                TextField(
+                    value = inputAmount,
+                    onValueChange = { inputAmount = it },
+                    singleLine = true
+                )
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val amount = inputAmount.toDoubleOrNull()
+
+                    if (amount != null && amount > 0) {
+                        onAddBalance(amount)
+                        onDismiss()
+                    }
+                }
+            ) {
+                Text("Add")
+            }
+        },
+        dismissButton = {
+            Button(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
